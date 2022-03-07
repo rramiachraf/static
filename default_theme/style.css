@@ -1,0 +1,145 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+:root {
+	--bg: #101313;
+	--primary-fg: #DDDDDD;
+	--secondary-fg: #d6d6d6;
+	--code-bg: #1A1C20;
+	--anchor-fg: #1187C6;
+}
+
+body {
+	background-color: var(--bg);
+	max-width: 800px;
+	margin: auto;
+	padding: 25px 0;
+	box-sizing: border-box;
+}
+
+#article {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	justify-content: center;
+	margin: 10px 0;
+}
+
+#article-title {
+	font-size: 35px;
+	color: var(--primary-fg);
+	text-align: center;
+}
+
+#article-date {
+	font-size: 15px;
+	font-family: monospace;
+	text-align: center;
+	color: var(--secondary-fg);
+}
+
+#article-main {
+	color: var(--primary-fg);
+}
+
+#article-main > h1, h2, h3, h4, h5, h6 {
+	margin: 25px 0 15px 0;
+}
+
+#article-main > h1 {
+	font-size: 25px;
+}
+
+#article-main > h2 {
+	font-size: 20px;
+}
+
+#article-main img {
+	max-width: 100%;
+	margin: 10px auto;
+}
+
+#article-main > p {
+	font-size: 16px;
+	line-height: 25px;
+	color: var(--secondary-fg);
+}
+
+#article-main code {
+	background-color: var(--code-bg);
+	border-radius: 3px;
+}
+
+#article-main > p > code {
+	background-color: var(--code-bg);
+	padding: 2px 4px;
+	border-radius: 3px;
+}
+
+#article-main > pre > code {
+	padding: 10px;
+	display: block;
+	font-size: 13px;
+	margin: 5px 0;
+	line-height: 20px;
+}
+
+footer {
+	text-align: center;
+	font-size: 14px;
+	color: var(--primary-fg);
+}
+
+a {
+	text-decoration: none;
+	color: var(--anchor-fg);
+	font-weight: 600;
+}
+
+ul, ol {
+	list-style-position: inside;
+}
+
+li {
+	line-height: 25px;
+}
+
+#nav-home {
+	text-align: center;
+	display: block;
+	margin: 20px 0;
+	text-transform: uppercase;
+}
+
+#index{
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+header {
+	text-align: center;
+	color: white;
+}
+
+#nav-articles {
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin: 20px 0;
+	flex-grow: 2;
+}
+
+#nav-articles > li {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+#nav-articles > li > small {
+	color: var(--secondary-fg)
+}
+

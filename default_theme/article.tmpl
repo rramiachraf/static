@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		{{template "head" .}}
+		<link rel="stylesheet" type="text/css" href="../style.css" />
+	</head>
+	<body>
+		<div id="article">
+			<h1 id="article-title">{{.Title}}</h1>
+			<small id="article-date">{{.Date}}</small>
+			<main id="article-main">
+				{{.Content}}
+			</main>
+		</div>
+		<a id="nav-home" href="/">[homepage]</a>
+		{{template "footer" .Footer}}
+	</body>
+</html>

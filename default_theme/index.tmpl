@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		{{template "head" .}}
+		<link rel="stylesheet" type="text/css" href="./style.css" />
+	</head>
+	<body id="index">
+		<header>
+			<h1>{{.Title}}</h1>
+		</header>
+		<ul id="nav-articles">
+			{{range .Articles}}
+				<li>
+					<a href="/article/{{.Slug}}.html">{{.Title}}</a>
+					<small>{{.Date}}</small>
+				</li>
+			{{end}}
+		</ul>
+		{{template "footer" .Footer}}
+	</body>
+</html>
