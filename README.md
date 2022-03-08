@@ -32,7 +32,7 @@ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliqu
 ```
 
 * You must specify a date with this exact format or `static` won't be able to parse it
-* You must leave a new line between the date and the markdown content.
+* You must leave an empty new line between the date and the markdown content.
 * You can name your post files anything, just make sure they end with `.md`.
 * static will generate a slug from the title you provide in the first line.
 
