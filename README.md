@@ -24,7 +24,8 @@ A blog post file contains 3 areas: title, date, and the markdown content.
 Your blog post title
 March 07, 2022 - 21:40
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex:
 - Duis
 - Excepteur sint occaecat
 - Culpa qui officia deserunt mollit
