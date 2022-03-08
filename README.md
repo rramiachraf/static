@@ -1,5 +1,5 @@
 # static
-Build fast, lightweight blogs using only markdown.
+Build fast and lightweight blogs using only markdown.
 
 ## Install
 Go 1.16+:
