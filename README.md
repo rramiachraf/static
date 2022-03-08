@@ -17,7 +17,7 @@ footer: footer text
 theme: theme file
 ```
 
-You can then start writing your blog posts by creating new files ending with `.md`.
+You can then start writing your blog posts by creating new files ending with `.md`.  
 A blog post file contains 3 areas: title, date, and the markdown content.
 
 ```md
