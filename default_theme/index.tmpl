@@ -9,9 +9,9 @@
 			<h1>{{.Title}}</h1>
 		</header>
 		<ul id="nav-articles">
-			{{range .Articles}}
+			{{range .Posts}}
 				<li>
-					<a href="/article/{{.Slug}}.html">{{.Title}}</a>
+					<a href="/post/{{.Slug}}.html">{{.Title}}</a>
 					<small>{{.Date}}</small>
 				</li>
 			{{end}}
