@@ -62,18 +62,18 @@ func build(c Conf, out string) {
 		log.Fatalln(err)
 	}
 
-	err = os.MkdirAll(path.Join(out, "article"), 0777)
+	err = os.MkdirAll(path.Join(out, "post"), 0777)
 
 	if errors.Is(err, os.ErrExist) {
 		fmt.Printf("\"%s\" directory already exist, please remove or specify another one\n", out)
 		os.Exit(1)
 	}
 
-	articles, err := buildArticles(c, out)
+	posts, err := buildPosts(c, out)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	buildIndex(c, articles, out)
+	buildIndex(c, posts, out)
 	buildStyle(theme["style.css"], out)
 }
 
@@ -81,11 +81,11 @@ type index struct {
 	Title       string
 	Description string
 	Footer      string
-	Articles    interface{}
+	Posts       interface{}
 }
 
 // build index.html file to "out" directory
-func buildIndex(c Conf, articles []map[string]string, out string) error {
+func buildIndex(c Conf, posts []map[string]string, out string) error {
 	p := path.Join(out, "index.html")
 	f, err := os.Create(p)
 
@@ -99,7 +99,7 @@ func buildIndex(c Conf, articles []map[string]string, out string) error {
 	data.Title = c.Title
 	data.Description = c.Description
 	data.Footer = c.Footer
-	data.Articles = articles
+	data.Posts = posts
 
 	tmpl := parseTheme(c.Theme, "index")
 	tmpl.Execute(f, data)

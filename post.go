@@ -14,38 +14,38 @@ import (
 	md "github.com/russross/blackfriday/v2"
 )
 
-type Article struct {
-	Title   string
-	Date    time.Time
-	Content []byte
-	Slug    string
+type post struct {
+	title   string
+	date    time.Time
+	content []byte
+	slug    string
 }
 
 // get articles from articles directory
-func getArticles() ([]Article, error) {
-	var articles []Article
+func getPosts() ([]post, error) {
+	var posts []post
 
 	if paths, err := filepath.Glob("*.md"); err == nil {
 		for _, p := range paths {
-			var article Article
-			article.parse(p)
-			articles = append(articles, article)
+			var pt post
+			pt.parse(p)
+			posts = append(posts, pt)
 		}
 	}
 
-	return articles, nil
+	return posts, nil
 }
 
 // generate articles to the specified "out" directory
-func buildArticles(c Conf, out string) ([]map[string]string, error) {
-	articles, err := getArticles()
+func buildPosts(c Conf, out string) ([]map[string]string, error) {
+	posts, err := getPosts()
 
 	if err != nil {
 		return nil, err
 	}
 
-	for _, a := range articles {
-		p := path.Join(out, "article", a.Slug+".html")
+	for _, pt := range posts {
+		p := path.Join(out, "post", pt.slug+".html")
 		f, err := os.Create(p)
 
 		if err != nil {
@@ -56,37 +56,37 @@ func buildArticles(c Conf, out string) ([]map[string]string, error) {
 		defer f.Close()
 
 		data := map[string]string{
-			"Title":       a.Title,
-			"Date":        a.Date.Format("Jan 02 2006"),
+			"Title":       pt.title,
+			"Date":        pt.date.Format("Jan 02 2006"),
 			"Description": c.Description,
 			"Footer":      c.Footer,
-			"Content":     string(a.Content),
+			"Content":     string(pt.content),
 		}
 
-		tmpl := parseTheme(c.Theme, "article")
+		tmpl := parseTheme(c.Theme, "post")
 		tmpl.Execute(f, data)
 	}
 
-	sort.SliceStable(articles, func(i, j int) bool {
-		return articles[i].Date.After(articles[j].Date)
+	sort.SliceStable(posts, func(i, j int) bool {
+		return posts[i].date.After(posts[j].date)
 	})
 
-	var indexArticles []map[string]string
+	var nav []map[string]string
 
-	for _, a := range articles {
-		iA := map[string]string{
-			"Title": a.Title,
-			"Slug":  a.Slug,
-			"Date":  a.Date.Format("Jan 02 2006"),
+	for _, pt := range posts {
+		item := map[string]string{
+			"Title": pt.title,
+			"Slug":  pt.slug,
+			"Date":  pt.date.Format("Jan 02 2006"),
 		}
-		indexArticles = append(indexArticles, iA)
+		nav = append(nav, item)
 	}
 
-	return indexArticles, nil
+	return nav, nil
 }
 
 // read first two line to parse title and date of the article
-func (a *Article) parse(p string) error {
+func (pt *post) parse(p string) error {
 	f, err := os.ReadFile(p)
 	if err != nil {
 		return err
@@ -100,10 +100,10 @@ func (a *Article) parse(p string) error {
 		i++
 		switch i {
 		case 1:
-			a.Title = sc.Text()
+			pt.title = sc.Text()
 		case 2:
 			t, _ := time.Parse("January 02, 2006 - 15:04", sc.Text())
-			a.Date = t
+			pt.date = t
 		case 3:
 			continue
 		default:
@@ -112,7 +112,7 @@ func (a *Article) parse(p string) error {
 
 	}
 
-	a.Slug = slug.Make(a.Title)
-	a.Content = md.Run(markdown)
+	pt.slug = slug.Make(pt.title)
+	pt.content = md.Run(markdown)
 	return nil
 }
