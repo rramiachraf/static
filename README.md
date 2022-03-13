@@ -53,7 +53,7 @@ A theme file is simply just a tar archive that contains 5 files:
 - index.tmpl
 - head.tmpl
 - footer.tmpl
-- article.tmpl
+- post.tmpl
 - style.css
 
 `.tmpl` files are golang templates, you might need to take a look at the `default_theme` to get a good understanding.
