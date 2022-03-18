@@ -2,6 +2,7 @@ package main
 
 import (
 	"archive/tar"
+	"embed"
 	"fmt"
 	"io"
 	"os"
@@ -9,9 +10,26 @@ import (
 	"text/template"
 )
 
+//go:embed classic
+var defaultTheme embed.FS
+
 type Theme map[string][]byte
 
 func openTheme(name string) (Theme, error) {
+	theme := make(Theme)
+
+	if name == "" {
+		files := []string{"index.tmpl", "head.tmpl", "footer.tmpl", "post.tmpl", "style.css"}
+
+		for _, f := range files {
+			if b, err := defaultTheme.ReadFile("classic/" + f); err == nil {
+				theme[f] = b
+			}
+		}
+
+		return theme, nil
+	}
+
 	f, err := os.Open(name)
 
 	if err != nil {
@@ -19,7 +37,6 @@ func openTheme(name string) (Theme, error) {
 	}
 
 	t := tar.NewReader(f)
-	theme := make(Theme)
 
 	for {
 		h, err := t.Next()
