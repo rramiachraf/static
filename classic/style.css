@@ -24,7 +24,6 @@ body {
 	flex-direction: column;
 	gap: 10px;
 	justify-content: center;
-	margin: 10px 0;
 }
 
 #article-title {
