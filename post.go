@@ -3,116 +3,87 @@ package main
 import (
 	"bufio"
 	"bytes"
-	"fmt"
+	"io"
 	"os"
-	"path"
 	"path/filepath"
-	"sort"
+	"regexp"
 	"time"
 
 	"github.com/gosimple/slug"
-	md "github.com/russross/blackfriday/v2"
+	"github.com/russross/blackfriday/v2"
 )
 
+const timeLayout = "02/01/2006 15:04"
+
 type post struct {
-	title   string
-	date    time.Time
-	content []byte
-	slug    string
+	Title   string
+	Date    time.Time
+	Slug    string
+	Content []byte
 }
 
-// get articles from articles directory
-func getPosts() ([]post, error) {
-	var posts []post
-
-	if paths, err := filepath.Glob("*.md"); err == nil {
-		for _, p := range paths {
-			var pt post
-			pt.parse(p)
-			posts = append(posts, pt)
-		}
-	}
-
-	return posts, nil
+func newPost() post {
+	var p post
+	return p
 }
 
-// generate articles to the specified "out" directory
-func buildPosts(c Conf, out string) ([]map[string]string, error) {
-	posts, err := getPosts()
-
-	if err != nil {
-		return nil, err
-	}
-
-	for _, pt := range posts {
-		p := path.Join(out, "post", pt.slug+".html")
-		f, err := os.Create(p)
-
-		if err != nil {
-			fmt.Println("error creating", p)
-			continue
-		}
-
-		defer f.Close()
-
-		data := map[string]string{
-			"Title":       pt.title,
-			"Date":        pt.date.Format("Jan 02 2006"),
-			"Description": c.Description,
-			"Footer":      c.Footer,
-			"Content":     string(pt.content),
-		}
-
-		tmpl := parseTheme(c.Theme, "post")
-		tmpl.Execute(f, data)
-	}
-
-	sort.SliceStable(posts, func(i, j int) bool {
-		return posts[i].date.After(posts[j].date)
-	})
-
-	var nav []map[string]string
-
-	for _, pt := range posts {
-		item := map[string]string{
-			"Title": pt.title,
-			"Slug":  pt.slug,
-			"Date":  pt.date.Format("Jan 02 2006"),
-		}
-		nav = append(nav, item)
-	}
-
-	return nav, nil
-}
-
-// read first two line to parse title and date of the article
-func (pt *post) parse(p string) error {
-	f, err := os.ReadFile(p)
+func (post *post) parse(p string) error {
+	file, err := os.Open(p)
 	if err != nil {
 		return err
 	}
 
-	sc := bufio.NewScanner(bytes.NewReader(f))
-	var markdown []byte
+	defer file.Close()
 
-	i := 0
-	for sc.Scan() {
-		i++
-		switch i {
-		case 1:
-			pt.title = sc.Text()
-		case 2:
-			t, _ := time.Parse("January 02, 2006 - 15:04", sc.Text())
-			pt.date = t
-		case 3:
-			continue
-		default:
-			markdown = bytes.Join([][]byte{markdown, sc.Bytes()}, []byte("\n"))
-		}
+	metadata, content := scan(file)
+	m := parseMetadata(metadata)
 
+	post.Title = m["TITLE"]
+	post.Slug = slug.Make(m["TITLE"])
+	post.Content = blackfriday.Run(content)
+	if date, err := time.Parse(timeLayout, m["DATE"]); err == nil {
+		post.Date = date
 	}
 
-	pt.slug = slug.Make(pt.title)
-	pt.content = md.Run(markdown)
 	return nil
+}
+
+// scan file and seperate metadata from content
+func scan(f io.Reader) ([]byte, []byte) {
+	var metadata []byte
+	var content []byte
+
+	s := bufio.NewScanner(f)
+	var found bool
+
+	for s.Scan() {
+		if bytes.Compare(s.Bytes(), []byte{}) == 0 {
+			found = true
+		}
+
+		switch found {
+		case true:
+			content = bytes.Join([][]byte{content, s.Bytes()}, []byte("\n"))
+		case false:
+			metadata = bytes.Join([][]byte{metadata, s.Bytes()}, []byte("\n"))
+		}
+	}
+
+	return metadata, content
+}
+
+// parse metadata from bytes into a string map
+func parseMetadata(metadata []byte) map[string]string {
+	title := regexp.MustCompile(`TITLE\s(.*)`).FindSubmatch(metadata)
+	date := regexp.MustCompile(`DATE\s(.*)`).FindSubmatch(metadata)
+
+	return map[string]string{
+		"TITLE": string(title[1]),
+		"DATE":  string(date[1]),
+	}
+}
+
+// search the current directory for posts (files ending with .md)
+func getPosts() ([]string, error) {
+	return filepath.Glob("*.md")
 }
