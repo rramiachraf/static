@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"regexp"
 	"time"
 )
 
@@ -107,9 +108,12 @@ func buildFeed(dist string, ch channel) error {
 }
 
 func sliceContent(s []byte) string {
-	if len(s) > 200 {
-		return string(s)[:200] + "..."
+	r := regexp.MustCompile(`\<\/?\w+\>`)
+	ns := r.ReplaceAll(s, []byte{})
 
+	if len(s) > 200 {
+		return string(ns)[:200] + "..."
 	}
-	return string(s)
+
+	return string(ns)
 }
