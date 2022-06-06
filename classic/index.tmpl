@@ -12,10 +12,10 @@
 			{{range .Posts}}
 				<li>
 					<a href="/post/{{.Slug}}.html">{{.Title}}</a>
-					<small>{{.Date}}</small>
+					<small>{{ .Date.Format "Jan 02 2006" }}</small>
 				</li>
 			{{end}}
 		</ul>
-		{{template "footer" .Footer}}
+		{{template "footer"}}
 	</body>
 </html>
