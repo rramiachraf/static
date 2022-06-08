@@ -138,8 +138,8 @@ li {
 	text-align: center;
 	display: block;
 	margin-bottom: 2rem;
-	font-size: 1.6rem;
-	text-transform: uppercase;
+	font-size: 1.5rem;
+	text-transform: lowercase;
 }
 
 #index {
