@@ -40,7 +40,7 @@ func (post *post) parse(p string) error {
 
 	post.Title = m["TITLE"]
 	post.Slug = slug.Make(m["TITLE"])
-	post.Content = blackfriday.Run(content)
+	post.Content = blackfriday.Run(highlightCode(content))
 	if date, err := time.Parse(timeLayout, m["DATE"]); err == nil {
 		post.Date = date
 	}
