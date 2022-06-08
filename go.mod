@@ -3,6 +3,8 @@ module github.com/rramiachraf/static
 go 1.17
 
 require (
+	github.com/alecthomas/chroma/v2 v2.0.1 // indirect
+	github.com/dlclark/regexp2 v1.4.0 // indirect
 	github.com/gosimple/slug v1.12.0 // indirect
 	github.com/gosimple/unidecode v1.0.1 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
