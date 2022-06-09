@@ -37,7 +37,7 @@ func build(c conf, dist string) {
 
 	t := make(theme)
 
-	t.openDefaultTheme()
+	t.openDefaultTheme(dist)
 
 	var posts []post
 	var items []item
