@@ -1,3 +1,53 @@
+/* inter-regular - latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  src: local(''),
+       url('../fonts/inter-v11-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+       url('../fonts/inter-v11-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* inter-500 - latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  src: local(''),
+       url('../fonts/inter-v11-latin-500.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+       url('../fonts/inter-v11-latin-500.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* inter-700 - latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  src: local(''),
+       url('../fonts/inter-v11-latin-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+       url('../fonts/inter-v11-latin-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* roboto-mono-regular - latin */
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: local(''),
+       url('../fonts/roboto-mono-v21-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+       url('../fonts/roboto-mono-v21-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* roboto-mono-600 - latin */
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 600;
+  src: local(''),
+       url('../fonts/roboto-mono-v21-latin-600.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+       url('../fonts/roboto-mono-v21-latin-600.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
 * {
 	margin: 0;
 	padding: 0;
@@ -22,7 +72,7 @@ body {
 	max-width: 50vw;
 	margin: auto;
 	box-sizing: border-box;
-	font-family: sans-serif;
+	font-family: inter, sans-serif;
 }
 
 @media (max-width: 680px) {
@@ -48,7 +98,7 @@ body {
 
 #article-date {
 	font-size: 1.5rem;
-	font-family: monospace;
+	font-family: roboto mono, monospace;
 	text-align: center;
 	color: var(--secondary-fg);
 }
@@ -85,14 +135,14 @@ body {
 	font-size: 1.4rem;
 }
 
-#article-main pre {
+#article-main code {
 	border-radius: 0.3rem;
-	font-family: monospace;
+	font-family: roboto mono, monospace;
 }
 
 #article-main > p > code {
 	background-color: var(--code-bg);
-	padding: 0.2rem 0.4rem;
+	padding: 0.2rem 0.3rem;
 	border-radius: 0.3rem;
 }
 
