@@ -1,6 +1,13 @@
 # static
 Build fast and lightweight blogs using markdown.
 
+## Features
+- Fast
+- Minimalist
+- RSS feed
+- Easy to setup
+- Highlighted code blocks
+
 ## Install
 Go 1.16+:
 ```
@@ -13,17 +20,15 @@ Create a directory to host your blog posts, and in there create a `config.yml` w
 ```yaml
 title: blog title
 description: blog description
-footer: footer text
-# theme field is optional, if not specified static will fallback to the default theme.
-theme: theme file
+url: example.com #must be provided if you want RSS
 ```
 
 You can then start writing your blog posts by creating new files ending with `.md`.  
-A blog post file contains 3 areas: title, date, and the body written in markdown.
+A blog post file contains 2 areas seperated with an empty line, metadata and the post content.
 
 ```md
-Your blog post title
-March 07, 2022 - 21:40
+TITLE Your blog post title
+DATE 07/03/2022 21:40
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex:
@@ -32,12 +37,11 @@ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliqu
 - Culpa qui officia deserunt mollit
 ```
 
-* You must specify a date with this exact format or `static` won't be able to parse it
-* You must leave an empty new line between the date and the markdown content.
+* You must specify a date with the format `DD/MM/YYYY HH:MM` or `static` won't be able to parse it.
 * You can name your post files anything, just make sure they end with `.md`.
-* static will generate a slug from the title you provide in the title (first line).
+* static will generate a slug from the title you provide in the title.
 
-After following all the necessary steps, you could simply just run `static build`, static will go through the files and generate the `/dist` folder with all the necessary files to host your blog.
+After following all the necessary steps, you could simply just run `static`, static will go through the files and generate the `./dist` folder with all the necessary files to host your blog.
 
 ## Flags
 ```
@@ -46,15 +50,4 @@ After following all the necessary steps, you could simply just run `static build
   -out string
     	directory path where the generated files will be saved (default "dist")
 ```
-So, you can something like: `static build -config /my-custom-path/my-conf.yml -out /somewhere`.
-
-## Themes
-A theme file is simply a tarball that contains 5 files:
-
-- index.tmpl
-- head.tmpl
-- footer.tmpl
-- post.tmpl
-- style.css
-
-`.tmpl` files are golang templates, you might need to take a look at the `classic` theme to get a good understanding.
+So, you can do something like: `static -config /my-custom-path/my-conf.yml -out /somewhere`.
