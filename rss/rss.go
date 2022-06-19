@@ -1,24 +1,24 @@
-package main
+package rss
 
 import (
 	"encoding/xml"
 	"io"
 )
 
-type rss struct {
+type RSS struct {
 	Version string  `xml:"version,attr"`
-	Channel channel `xml:"channel"`
+	Channel Channel `xml:"channel"`
 }
 
-type channel struct {
+type Channel struct {
 	Title       string `xml:"title"`
 	Description string `xml:"description"`
 	Link        string `xml:"link"`
 	Generator   string `xml:"generator"`
-	Item        []item `xml:"item"`
+	Items       []Item `xml:"item"`
 }
 
-type item struct {
+type Item struct {
 	Title       string `xml:"title"`
 	Link        string `xml:"link"`
 	Description string `xml:"description"`
@@ -26,10 +26,10 @@ type item struct {
 	GUID        string `xml:"guid"`
 }
 
-func generateFeed(w io.Writer, c channel) error {
+func Generate(w io.Writer, c Channel) error {
 	encoder := xml.NewEncoder(w)
 	c.Generator = "rramiachraf/static"
-	data := rss{"2.0", c}
+	data := RSS{"2.0", c}
 
 	err := encoder.Encode(&data)
 	if err != nil {

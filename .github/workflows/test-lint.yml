@@ -1,0 +1,20 @@
+name: test and lint
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v2
+        with:
+          go-version: "^1.18.3"
+      - uses: actions/checkout@/v3
+      - run: go test -v ./...
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v2
+        with:
+          go-version: "^1.18.3"
+      - uses: actions/checkout@v3
+      - run: go vet
