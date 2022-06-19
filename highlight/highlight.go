@@ -1,4 +1,4 @@
-package main
+package highlight
 
 import (
 	"bytes"
@@ -49,7 +49,7 @@ func format(lang, code string) ([]byte, error) {
 	return w.Bytes(), nil
 }
 
-func parseSnippet(snippet []byte) (string, string) {
+func ParseSnippet(snippet []byte) (string, string) {
 	r := regexp.MustCompile(`(?ms)\x60\x60\x60(\w+)?\s?(.*?)\x60\x60\x60`)
 	m := r.FindSubmatch(snippet)
 
@@ -68,11 +68,11 @@ func parseSnippet(snippet []byte) (string, string) {
 	return lang, code
 }
 
-func highlightCode(content []byte) []byte {
+func Highlight(content []byte) []byte {
 	r := regexp.MustCompile(`(?ms)\x60\x60\x60.*?\x60\x60\x60`)
 
 	return r.ReplaceAllFunc(content, func(s []byte) []byte {
-		lang, code := parseSnippet(s)
+		lang, code := ParseSnippet(s)
 		if highlighted, err := format(lang, code); err == nil {
 			return highlighted
 		}

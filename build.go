@@ -7,6 +7,10 @@ import (
 	"path"
 	"regexp"
 	"time"
+
+	"github.com/rramiachraf/static/config"
+	"github.com/rramiachraf/static/post"
+	"github.com/rramiachraf/static/rss"
 )
 
 const perm = 0444
@@ -14,7 +18,7 @@ const perm = 0444
 type indexParams struct {
 	Title       string
 	Description string
-	Posts       []post
+	Posts       []post.Post
 }
 
 type postParams struct {
@@ -24,13 +28,13 @@ type postParams struct {
 	Description string
 }
 
-func build(c conf, dist string) {
+func build(c config.Conf, dist string) {
 	os.RemoveAll(dist)
 	if err := os.MkdirAll(path.Join(dist, "post"), 0777); err != nil {
 		log.Fatalln(err)
 	}
 
-	mds, err := getPosts()
+	mds, err := post.GetAll("")
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -39,15 +43,21 @@ func build(c conf, dist string) {
 
 	t.openDefaultTheme(dist)
 
-	var posts []post
-	var items []item
+	var posts []post.Post
+	var items []rss.Item
 
 	for _, md := range mds {
-		p := newPost()
-		if err := p.parse(md); err == nil {
+		p := post.New()
+		if err := p.Parse(md); err == nil {
 			posts = append(posts, p)
 			link := fmt.Sprintf(`%s/post/%s.html`, c.URL, p.Slug)
-			i := item{p.Title, link, sliceContent(p.Content), p.Date.Format(time.ANSIC), p.Slug}
+			i := rss.Item{
+				Title:       p.Title,
+				Link:        link,
+				Description: sliceContent(p.Content),
+				PubDate:     p.Date.Format(time.ANSIC),
+				GUID:        p.Slug,
+			}
 			items = append(items, i)
 		}
 	}
@@ -59,7 +69,7 @@ func build(c conf, dist string) {
 	buildIndex(t, dist, indexParams{c.Title, c.Description, posts})
 	buildStyle(t, dist)
 
-	ch := channel{c.Title, c.Description, c.URL, "", items}
+	ch := rss.Channel{Title: c.Title, Description: c.Description, Link: c.URL, Generator: "", Items: items}
 	buildFeed(dist, ch)
 }
 
@@ -76,7 +86,7 @@ func buildIndex(t theme, dist string, data indexParams) error {
 	return nil
 }
 
-func buildPost(t theme, dist string, p post, c conf) {
+func buildPost(t theme, dist string, p post.Post, c config.Conf) {
 	filename := fmt.Sprintf("%s.html", p.Slug)
 	path := path.Join(dist, "post", filename)
 	f, err := os.Create(path)
@@ -94,7 +104,7 @@ func buildStyle(t theme, dist string) {
 	os.WriteFile(path.Join(dist, "style.css"), t["style.css"], perm)
 }
 
-func buildFeed(dist string, ch channel) error {
+func buildFeed(dist string, ch rss.Channel) error {
 	f, err := os.Create(path.Join(dist, "feed.rss"))
 	if err != nil {
 		return err
@@ -102,7 +112,7 @@ func buildFeed(dist string, ch channel) error {
 
 	defer f.Close()
 
-	generateFeed(f, ch)
+	rss.Generate(f, ch)
 
 	return nil
 }

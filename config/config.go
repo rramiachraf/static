@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"os"
@@ -6,15 +6,15 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type conf struct {
+type Conf struct {
 	Title       string
 	Description string
 	URL         string
 	Theme       string
 }
 
-func parseConfig(p string) (conf, error) {
-	var c conf
+func Parse(p string) (Conf, error) {
+	var c Conf
 
 	f, err := os.Open(p)
 	if err != nil {
