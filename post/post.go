@@ -1,13 +1,13 @@
 package post
 
 import (
+	"bufio"
 	"bytes"
 	"errors"
 	"io"
 	"os"
 	"path"
 	"path/filepath"
-	"regexp"
 	"time"
 
 	"github.com/gosimple/slug"
@@ -70,14 +70,18 @@ func Scan(r io.Reader) ([]byte, []byte, error) {
 }
 
 // parse header bytes into a map
-func ParseHeader(header []byte) map[string]string {
-	title := regexp.MustCompile(`TITLE\s(.*)`).FindSubmatch(header)
-	date := regexp.MustCompile(`DATE\s(.*)`).FindSubmatch(header)
+func ParseHeader(h []byte) map[string]string {
+	header := make(map[string]string)
+	b := bufio.NewScanner(bytes.NewReader(h))
 
-	return map[string]string{
-		"TITLE": string(title[1]),
-		"DATE":  string(date[1]),
+	for b.Scan() {
+		name, value, found := bytes.Cut(b.Bytes(), []byte(" "))
+		if found {
+			header[string(name)] = string(value)
+		}
 	}
+
+	return header
 }
 
 // search the current directory for posts (files ending with .md)
