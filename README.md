@@ -1,5 +1,5 @@
 # static
-Build fast and lightweight blogs using markdown.
+Build fast and lightweight blogs using markdown. 
 
 ## Features
 - Fast
